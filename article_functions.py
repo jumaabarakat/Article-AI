@@ -2,9 +2,16 @@ import PyPDF2
 from langdetect import detect
 import openai
 from openai import OpenAI
+from docx import Document
+import os
+from dotenv import load_dotenv
+# client = OpenAI(
+#   api_key= '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'
+# )
+load_dotenv()
 
 client = OpenAI(
-  api_key= ''
+    api_key=os.getenv('api_key')
 )
 
 def extract_pdf_text(pdf_file):
@@ -25,11 +32,12 @@ def extract_pdf_text(pdf_file):
 
 def generate_article_from_content(content, topic, language):
     """Generates an article based on the content and topic using OpenAI API."""
-    prompt = f"Write an article about {topic} using the following content:\n{content} in {language}"
+    prompt = f"Write an article titled '{topic}' focused on {topic}. Use the document content for reference but avoid mentioning irrelevant terms. Here's the reference content:\n{content} in {language}"
+
     
     try:
         completion = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "You are an assistant that helps write articles."},
                 {"role": "user", "content": prompt}
@@ -54,3 +62,21 @@ def generate_article_from_content(content, topic, language):
 def detect_language(content):
     """Detect the language of the document content."""
     return detect(content)
+
+
+def save_article_to_docx(article, topic):
+    """Saves the generated article to a .docx file."""
+    # Create a new Document object
+    doc = Document()
+    
+    # Add title and article content to the document
+    doc.add_heading(topic, level=1)
+    doc.add_paragraph(article)
+
+    # Define file path (ensure the directory exists)
+    docx_file_path = os.path.join('/Users/mvp/Desktop/Article-AI/docx', f"{topic.replace(' ', '_')}_article.docx")
+    
+    # Save the document to the file path
+    doc.save(docx_file_path)
+
+    return docx_file_path
