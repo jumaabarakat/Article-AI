@@ -5,9 +5,6 @@ from openai import OpenAI
 from docx import Document
 import os
 from dotenv import load_dotenv
-# client = OpenAI(
-#   api_key= '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'
-# )
 load_dotenv()
 
 client = OpenAI(
