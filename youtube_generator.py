@@ -59,7 +59,7 @@ def generate_summary(transcript_text, language, type_of_summary):
             temperature=0.7,
         )
         # Access the content from the response correctly
-        summary = response.choices[0].message.content.strip()  # Updated line
+        summary = response.choices[0].summary.content.strip()  # Updated line
         return summary
     except Exception as e:
         raise Exception(f"Error generating summary: {e}")
