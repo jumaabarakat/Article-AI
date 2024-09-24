@@ -1,0 +1,10 @@
+moviepy
+SpeechRecognition
+openai
+python-dotenv
+whisper
+imageio[ffmpeg]
+pydub
+pytube
+youtube-transcript-api
+flask
